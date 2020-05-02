@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>David Ikin</Authors>
+    <Company>David IkinDavid Ikin</Company>
+    <Description>ASP.NET Core library for Specification Pattern</Description>
+    <Copyright>(c) David Ikin</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/davidikin45/AspNetCore.Specification</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/davidikin45/AspNetCore.Specification</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ASP.NET Core Specification</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.1.0" />
+  </ItemGroup>
+
+</Project>
