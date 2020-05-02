@@ -54,7 +54,7 @@ namespace AspNetCore.Specification
 
         public OrderBySpecification<TDestination> Map<TDestination>(IMapper mapper)
         {
-            return new SingleOrderBySpecification<TDestination>(AutoMapperHelper.MapOrderBy<T, TDestination>(mapper, ToExpression()));
+            return new SingleOrderBySpecification<TDestination>(AutoMapperExtensions.MapOrderBy<T, TDestination>(mapper, ToExpression()));
         }
 
         public OrderBySpecification<TDestination> Map<TDestination>(IOrderByMapper mapper)

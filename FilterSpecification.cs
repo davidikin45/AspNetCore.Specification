@@ -104,7 +104,7 @@ namespace AspNetCore.Specification
 
         public FilterSpecification<TDestination> Map<TDestination>(IMapper mapper)
         {
-            return new WhereFilterSpecification<TDestination>(AutoMapperHelper.MapWhereClause<T, TDestination>(mapper, ToExpression()));
+            return new WhereFilterSpecification<TDestination>(AutoMapperExtensions.MapWhereClause<T, TDestination>(mapper, ToExpression()));
         }
     }
 

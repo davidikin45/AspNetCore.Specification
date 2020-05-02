@@ -49,7 +49,7 @@ namespace AspNetCore.Specification
 
         public IncludeSpecification<TDestination> Map<TDestination>(IMapper mapper)
         {
-            return new MultipleIncludeSpecification<TDestination>(AutoMapperHelper.MapIncludes<T, TDestination>(mapper, ToExpression()));
+            return new MultipleIncludeSpecification<TDestination>(AutoMapperExtensions.MapIncludes<T, TDestination>(mapper, ToExpression()));
         }
     }
 

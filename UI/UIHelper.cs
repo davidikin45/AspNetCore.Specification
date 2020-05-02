@@ -141,7 +141,7 @@ namespace AspNetCore.Specification.UI
             {
                 var getIncludesMethod = typeof(UIHelper).GetMethod(nameof(UIHelper.GetIncludes), new Type[] { sourceType });
                 var includesArray = getIncludesMethod.Invoke(null, new object[] { includes });
-                var mapIncludesMethod = typeof(AutoMapperHelper).GetMethod(nameof(AutoMapperHelper.MapIncludes), new Type[] { sourceType, destinationType });
+                var mapIncludesMethod = typeof(AutoMapperExtensions).GetMethod(nameof(AutoMapperExtensions.MapIncludes), new Type[] { sourceType, destinationType });
 
                 try
                 {
@@ -782,7 +782,7 @@ namespace AspNetCore.Specification.UI
             {
                 var getOrderByMethod = typeof(UIHelper).GetMethod(nameof(UIHelper.GetOrderByIQueryable), new Type[] { sourceType });
                 var orderByIQueryable = getOrderByMethod.Invoke(null, new object[] { orderBy });
-                var mapOrderByMethod = typeof(AutoMapperHelper).GetMethod(nameof(AutoMapperHelper.MapOrderBy), new Type[] { sourceType, destinationType });
+                var mapOrderByMethod = typeof(AutoMapperExtensions).GetMethod(nameof(AutoMapperExtensions.MapOrderBy), new Type[] { sourceType, destinationType });
 
                 try
                 {

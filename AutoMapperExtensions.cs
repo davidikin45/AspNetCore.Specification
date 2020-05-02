@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace AspNetCore.Specification
 {
-    internal static class AutoMapperHelper
+    public static class AutoMapperExtensions
     {
         #region Includes Mapping
         //Expression > Func yes
