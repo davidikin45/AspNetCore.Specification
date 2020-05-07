@@ -20,6 +20,7 @@ namespace AspNetCore.Specification.Data
         private int? _skip;
         private int? _take;
         private bool _fullgraph;
+        private bool? _tracking;
 
         public SpecificationDbQuery(DbContext context)
         {
@@ -74,9 +75,21 @@ namespace AspNetCore.Specification.Data
             return this;
         }
 
+        public SpecificationDbQuery<TEntity> AsTracking()
+        {
+            _tracking = true;
+            return this;
+        }
+
+        public SpecificationDbQuery<TEntity> AsNoTracking()
+        {
+            _tracking = false;
+            return this;
+        }
+
         public override string ToString()
         {
-            var query = GetQueryable(false, _filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
+            var query = GetQueryable(_filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
             return query.ToString();
         }
 
@@ -84,40 +97,39 @@ namespace AspNetCore.Specification.Data
 
         public List<TEntity> ToList()
         {
-            return GetQueryable(false, _filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression()).ToList();
+            return GetQueryable(_filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression()).ToList();
         }
 
         public Task<List<TEntity>> ToListAsync(CancellationToken cancellationToken)
         {
-            return GetQueryable(false, _filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression()).ToListAsync(cancellationToken);
+            return GetQueryable(_filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression()).ToListAsync(cancellationToken);
         }
 
         public CountList<TEntity> ToCountList()
         {
-            var query = GetQueryable(false, _filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
+            var query = GetQueryable(_filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
             return CountList<TEntity>.Create(query, _skip, _take);
         }
 
         public Task<CountList<TEntity>> ToCountListAsync(CancellationToken cancellationToken)
         {
-            var query = GetQueryable(false, _filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
+            var query = GetQueryable(_filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
             return CountList<TEntity>.CreateAsync(query, _skip, _take, cancellationToken);
         }
 
         public PagedList<TEntity> ToPagedList()
         {
-            var query = GetQueryable(false, _filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
+            var query = GetQueryable(_filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
             return PagedList<TEntity>.Create(query, _skip, _take);
         }
 
         public Task<PagedList<TEntity>> ToPagedListAsync(CancellationToken cancellationToken)
         {
-            var query = GetQueryable(false, _filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
+            var query = GetQueryable(_filterSpecification.ToExpression(), _orderBySpecification.ToExpression().Compile(), null, null, _fullgraph, _includeSpecification.ToExpression());
             return PagedList<TEntity>.CreateAsync(query, _skip, _take, cancellationToken);
         }
 
         private IQueryable<TEntity> GetQueryable(
-           bool tracking,
            Expression<Func<TEntity, bool>> filter = null,
            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
            int? skip = null,
@@ -127,14 +139,19 @@ namespace AspNetCore.Specification.Data
         {
             //includeProperties = includeProperties ?? string.Empty;
             IQueryable<TEntity> query = _context.Set<TEntity>();
-            if (!tracking)
+
+            //By default use DbContext tracking
+            if(_tracking.HasValue)
             {
-                query = query.AsNoTracking();
-            }
-            else
-            {
-                //By default tracking is QueryTrackingBehavior.TrackAll. If the DbContext is set to QueryTrackingBehavior.NoTracking we don't want to allow a user to override this behaviour.
-                //query = query.AsTracking();
+                if (!_tracking.Value)
+                {
+                    query = query.AsNoTracking();
+                }
+                else
+                {
+                    //By default tracking is QueryTrackingBehavior.TrackAll. If the DbContext is set to QueryTrackingBehavior.NoTracking we don't want to allow a user to override this behaviour.
+                    query = query.AsTracking();
+                }
             }
 
             //where clause
